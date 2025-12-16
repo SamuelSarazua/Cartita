@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Para ti 🥺❤️</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  min-height:100vh;
+  background:linear-gradient(180deg,#1b1b3a,#2f2f6e,#ffd6e8);
+  font-family:'Segoe UI',sans-serif;
+  color:#fff;
+
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+
+  overflow-x:hidden; /* 🔒 CLAVE */
+  padding:16px;
+}
+
+/* ESTRELLAS */
+.star{
+  position:fixed;
+  background:white;
+  width:2px;
+  height:2px;
+  border-radius:50%;
+  animation:twinkle 3s infinite;
+}
+
+@keyframes twinkle{
+  0%,100%{opacity:.2}
+  50%{opacity:1}
+}
+
+/* CORAZONES */
+.heart{
+  position:fixed;
+  bottom:-20px;
+  font-size:clamp(14px,4vw,18px);
+  opacity:.6;
+  animation:float 10s linear infinite;
+  pointer-events:none;
+}
+
+@keyframes float{
+  to{
+    transform:translateY(-120vh);
+    opacity:0;
+  }
+}
+
+/* CARD PRINCIPAL */
+.card{
+  background:rgba(255,255,255,.18);
+  backdrop-filter:blur(12px);
+  width:min(92vw,380px);
+  padding:28px 22px;
+  border-radius:26px;
+  box-shadow:0 25px 50px rgba(0,0,0,.35);
+  z-index:2;
+
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+}
+
+.card h1, .card p{
+  text-align:center;
+  font-size:clamp(18px,5vw,24px);
+}
+
+.card p{
+  opacity:.9;
+}
+
+/* BOTONES */
+button{
+  border:none;
+  border-radius:30px;
+  padding:14px;
+  background:linear-gradient(145deg,#ff8fc7,#ff6fb5);
+  color:#fff;
+  font-size:15px;
+  cursor:pointer;
+  width:100%;
+  box-shadow:0 10px 20px rgba(0,0,0,.2);
+  transition:transform .15s, box-shadow .15s;
+}
+
+button:hover{
+  transform:translateY(-2px);
+}
+
+/* REGALOS */
+.regalos{
+  display:flex;
+  gap:14px;
+  justify-content:center;
+  margin:10px 0;
+}
+
+.regalo{
+  width:70px;
+  height:70px;
+  background:#ff7ab8;
+  border-radius:15px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:28px;
+  cursor:pointer;
+
+  animation: regaloFlota 3s ease-in-out infinite;
+  transition: transform .3s ease, box-shadow .3s ease;
+}
+
+.regalo:hover{
+  transform: translateY(-6px) scale(1.05);
+  box-shadow: 0 10px 20px rgba(255,122,184,.6);
+}
+
+@keyframes regaloFlota{
+  0%,100%{ transform:translateY(0); }
+  50%{ transform:translateY(-6px); }
+}
+
+
+.regalo.abierto{
+  background:#fff;
+  color:#c2185b;
+  font-size:13px;
+  padding:8px;
+  animation: abrirRegalo .6s ease forwards;
+}
+
+@keyframes abrirRegalo{
+  0%{
+    transform:scale(0.8) rotate(-8deg);
+    opacity:0;
+  }
+  60%{
+    transform:scale(1.1) rotate(4deg);
+    opacity:1;
+  }
+  100%{
+    transform:scale(1) rotate(0);
+  }
+}
+
+
+/* REPRODUCTOR */
+.player{
+  margin-top:6px;
+  display:flex;
+  align-items:center;
+  gap:14px;
+  background:rgba(255,255,255,.22);
+  padding:16px;
+  border-radius:20px;
+  cursor:pointer;
+  transition:transform .2s;
+}
+
+.player:hover{
+  transform:scale(1.03);
+}
+
+.icono{
+  width:46px;
+  height:46px;
+  border-radius:50%;
+  background:#ff8fc7;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+/* OVERLAY */
+#overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(20,20,50,.95);
+  display:none;
+  justify-content:center;
+  align-items:flex-start;
+  padding:16px;
+  z-index:10;
+  overflow:hidden;
+  width:100%;
+  max-width:100%;
+}
+
+.carta{
+  background:#fff;
+  color:#1f1f1f;
+  width:100%;
+  max-width:420px;
+  min-width:0; /* 🔒 evita expansión */
+  height:85vh;
+  padding:20px;
+  border-radius:22px;
+  display:flex;
+  flex-direction:column;
+  box-sizing:border-box;
+}
+
+.carta h2{
+  margin-top:0;
+}
+
+.carta p,
+.carta div{
+  color:#1f1f1f;
+  font-size:16px;
+  line-height:1.7;
+}
+
+#frasco, .lista{
+  text-align: center;
+  font-size: clamp(16px, 4vw, 18px); /* Tamaño adecuado */
+  margin: 10px 0;
+}
+
+
+/* LISTA */
+.lista{
+  flex:1;
+  width:100%;
+  max-width:100%;
+  min-width:0;
+
+  overflow-y:auto;
+  overflow-x:hidden; /* 🔒 evitar el desbordamiento horizontal */
+  text-align:center;
+  margin-top:10px;
+  padding-right:6px;
+  font-size:15px;
+  line-height:1.6;
+  white-space:normal;
+  word-break:break-word;
+}
+
+.lista div{
+  margin-bottom:8px;
+}
+
+/* BOTÓN VOLVER */
+#overlay button{
+  background:#ff6fb5;
+  color:white;
+  font-size:15px;
+  padding:12px 22px;
+  border-radius:25px;
+  margin-top:15px;
+}
+
+/* MÓVIL */
+@media (max-width:480px){
+  .card{
+    backdrop-filter:none;
+  }
+}
+
+/* BRILLOS */
+.sparkle{
+  position:fixed;
+  width:5px;
+  height:5px;
+  background:#fff;
+  border-radius:50%;
+  pointer-events:none;
+  animation:fade .7s forwards;
+}
+
+@keyframes fade{
+  to{opacity:0; transform:scale(2)}
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="card">
+  <h1>Holiii mi chiquita hermosa 🥺❤️</h1>
+  <p>Este lugar es solo para ti</p>
+
+  <div class="regalos">
+    <div class="regalo" onclick="abrir(this,0)">🎁</div>
+    <div class="regalo" onclick="abrir(this,1)">🎁</div>
+    <div class="regalo" onclick="abrir(this,2)">🎁</div>
+  </div>
+
+  <button onclick="frase()">🫙 Abrir frasco de frases</button>
+  <div id="frasco"></div>
+
+  <button onclick="mostrarAbrazo()">Sorpresita 🥺❤️</button>
+  <button onclick="mostrarCarta()">Cartita para ti 🥺❤️</button>
+
+  <div class="player" onclick="irACancion()">
+    <div class="icono">▶️</div>
+    <div>
+      <div>Tu canción 🥺❤️</div>
+      <small>Escúchala cuando quieras 🥺❤️</small>
+    </div>
+  </div>
+</div>
+
+<div id="overlay">
+  <div class="carta">
+    <h2 id="tituloCarta"></h2>
+    <div id="contenidoCarta" class="lista"></div>
+    <button onclick="cerrarOverlay()">Volver 🥺❤️</button>
+  </div>
+</div>
+
+<script>
+/* ESTRELLAS */
+for(let i=0;i<120;i++){
+  const s=document.createElement("div");
+  s.className="star";
+  s.style.left=Math.random()*100+"vw";
+  s.style.top=Math.random()*100+"vh";
+  document.body.appendChild(s);
+}
+
+/* CORAZONES */
+setInterval(()=>{
+  const h=document.createElement("div");
+  h.className="heart";
+  h.textContent="💗";
+  h.style.left=Math.random()*100+"vw";
+  document.body.appendChild(h);
+  setTimeout(()=>h.remove(),10000);
+},700);
+
+/* REGALOS */
+const mensajes=[
+  "Eres importante 🥺❤️",
+  "Eres la mejor 🥺❤️",
+  "Gracias por existir 🥺❤️"
+];
+
+function sparkleBurst(x,y){
+  for(let i=0;i<8;i++){
+    const s=document.createElement("div");
+    s.className="sparkle";
+    s.style.left=x+"px";
+    s.style.top=y+"px";
+    document.body.appendChild(s);
+    setTimeout(()=>s.remove(),700);
+  }
+}
+
+
+function abrir(c,i){
+  if(c.classList.contains("abierto")) return;
+
+  const rect=c.getBoundingClientRect();
+  sparkleBurst(rect.left+rect.width/2, rect.top+rect.height/2);
+
+  c.classList.add("abierto");
+  c.textContent=mensajes[i];
+}
+
+
+/* FRASCO */
+const frases=[
+  "Todo va a estar bien 🥺❤️",
+  "Eres suficiente 🥺❤️",
+  "No estás sola 🥺❤️",
+  "Respira, aquí estoy 🥺❤️",
+  "Mereces cosas bonitas 🥺❤️"
+];
+
+function frase(){
+  frasco.textContent=frases[Math.floor(Math.random()*frases.length)];
+}
+
+/* CARTA */
+const cartaTexto=`Sinceramente no tengo palabras para describir lo mucho que me encantas mi niñita hermosa. Eres la niña más hermosa, preciosa, dulce y tierna. Gracias por existir, por elegirme y por hacer mis días más bonitos. Te amo con todo mi corazón, de aquí a la luna y más allá. Y es que de verdad me encantas muchísimo, más de lo que a veces sé explicar. Me encanta cómo eres, cómo hablas, cómo sonríes y hasta cómo te pones cuando te da pena. Gracias por estar, por quedarte, por ser tú tal y como eres. Quiero que sepas que eres muy importante, que vales un montón y que haces mis días más bonitos solo con existir. Aquí estoy para ti, sin irme, sin cansarme, cuidándote y queriéndote siempre 🥺❤️`;
+
+function mostrarCarta(){
+  document.body.style.overflow = "hidden";
+  overlay.style.display="flex";
+  tituloCarta.textContent="Para ti 🥺❤️";
+  contenidoCarta.innerHTML="<p>"+cartaTexto+"</p>";
+}
+
+/* ===== 100 COSAS ===== */
+const cosas = [
+  // 💗 1–50 tiernas
+  "Tu sonrisa 🥺❤️",
+  "Tu risa 🥺❤️",
+  "Tu forma de reírte 🥺❤️",
+  "Tu voz 🥺❤️",
+  "Tu mirada 🥺❤️",
+  "Tu manera de hablar 🥺❤️",
+  "Tu forma de escuchar 🥺❤️",
+  "Tu ternura 🥺❤️",
+  "Tu dulzura 🥺❤️",
+  "Tu sensibilidad 🥺❤️",
+
+  "Tu forma de ser 🥺❤️",
+  "Tu manera de existir 🥺❤️",
+  "Tu presencia 🥺❤️",
+  "Tu energía 🥺❤️",
+  "Tu calma 🥺❤️",
+  "Tu paciencia 🥺❤️",
+  "Tu honestidad 🥺❤️",
+  "Tu corazón 🥺❤️",
+  "Tu nobleza 🥺❤️",
+  "Tu empatía 🥺❤️",
+
+  "Tu creatividad 🥺❤️",
+  "Tu curiosidad 🥺❤️",
+  "Tu sencillez 🥺❤️",
+  "Tu forma de pensar 🥺❤️",
+  "Tu forma de sentir 🥺❤️",
+  "Tu risa inesperada 🥺❤️",
+  "Tu risa tímida 🥺❤️",
+  "Tu manera de preocuparte 🥺❤️",
+  "Tu forma de cuidar 🥺❤️",
+  "Tu atención a los detalles 🥺❤️",
+
+  "Tu autenticidad 🥺❤️",
+  "Tu forma de ser tú 🥺❤️",
+  "Tu presencia tranquila 🥺❤️",
+  "Tu manera de acompañar 🥺❤️",
+  "Tu forma de apoyar 🥺❤️",
+  "Tu honestidad emocional 🥺❤️",
+  "Tu forma de aprender 🥺❤️",
+  "Tu manera de intentar 🥺❤️",
+  "Tu fortaleza 🥺❤️",
+  "Tu vulnerabilidad 🥺❤️",
+
+  "Tu forma de sentir profundo 🥺❤️",
+  "Tu forma de conectar 🥺❤️",
+  "Tu dulzura natural 🥺❤️",
+  "Tu esencia 🥺❤️",
+  "Tu forma de iluminar 🥺❤️",
+  "Tu manera de ser hogar 🥺❤️",
+  "Tu forma de querer 🥺❤️",
+  "Tu forma de querer bien 🥺❤️",
+  "Tu manera de estar 🥺❤️",
+  "Tu forma de existir así 🥺❤️",
+
+  // 😌 51–100 atreviditas suaves
+  "Tu sonrisa cuando sabes que te ves linda 😚❤️",
+  "Tu risa cuando intentas disimular 😚❤️",
+  "La forma en que me miras cuando te da pena 😚❤️",
+  "Tu mirada cuando sabes que gustas 😚❤️",
+  "Tu voz cuando hablas bajito 😚❤️",
+  "Cómo te ves cuando te emocionas 😚❤️",
+  "Tu forma de caminar cuando estás cómoda 😚❤️",
+  "Tu manera de sonreír con picardía 😚❤️",
+  "Cómo te sonrojas cuando te dicen algo bonito 😚❤️",
+  "Tu sonrisa lenta cuando estás de buen humor 😚❤️",
+
+  "La forma en que te haces la interesante 😚❤️",
+  "Tu carita cuando sabes que tienes razón 😚❤️",
+  "Cómo te ves cuando te concentras 😚❤️",
+  "Tu forma de morderte el labio al pensar 😚❤️",
+  "Tu manera de cruzar los brazos haciéndote la fuerte 😚❤️",
+  "Cómo te ves cuando no lo intentas 😚❤️",
+  "Tu risa cuando algo te da mucha risa 😚❤️",
+  "Tu forma de moverte cuando estás tranquila 😚❤️",
+  "La manera en que te quedas viendo sin decir nada 😚❤️",
+  "Cómo te ríes cuando te da pena 😚❤️",
+
+  "Tu forma de ser coqueta sin darte cuenta 😚❤️",
+  "Tu sonrisa cuando sabes que te están viendo 😚❤️",
+  "Cómo te ves cuando te arreglas 😚❤️",
+  "Cómo te ves cuando no te arreglas 😚❤️",
+  "Tu forma de ser linda sin esfuerzo 😚❤️",
+  "Tu manera de provocar sonrisas 😚❤️",
+  "Tu mirada cuando estás feliz 😚❤️",
+  "Tu carita cuando estás cansada 😚❤️",
+  "Tu forma de reírte con todo el cuerpo 😚❤️",
+  "Cómo te ves cuando estás cómoda siendo tú 😚❤️",
+
+  "Tu forma de estar cerquita 😚❤️",
+  "Tu presencia cuando llenas el espacio 😚❤️",
+  "Tu manera de hacer sentir confianza 😚❤️",
+  "Tu forma de mirar con intención 😚❤️",
+  "Tu sonrisa cuando juegas 😚❤️",
+  "Tu forma de ser atrevida sin exagerar 😚❤️",
+  "Tu manera de ser peligrosa para el corazón 😚❤️",
+  "Tu forma de ser bonita y traviesa 😚❤️",
+  "Tu manera de hacer latir más rápido 😚❤️",
+  "Tu forma de ser tú… y lo mucho que gusta eso 😚❤️",
+
+  "La forma en que me gusta estar cerca de ti 😚❤️",
+  "Cómo tu cuerpo se siente como el lugar correcto 😚❤️",
+  "Tu manera de acercarte y hacer que todo se sienta distinto 😚❤️",
+  "La forma en que tu presencia se siente tan bien 😚❤️",
+  "Cómo me gusta cuando estás cerquita y no hace falta decir nada 😚❤️",
+  "Tu manera de moverte que sin querer llama mi atención 😚❤️",
+  "La forma en que me haces notar cada gesto tuyo 😚❤️",
+  "Cómo me gusta estar contigo, así, cerca, tranquilos 😚❤️",
+  "Tu presencia que se siente bonita incluso sin tocar 😚❤️",
+  "La forma en que me gustas… completa, tal como eres 😚❤️"
+];
+
+/* LISTA 100 */
+function mostrarAbrazo(){
+  document.body.style.overflow = "hidden";
+  overlay.style.display="flex";
+  tituloCarta.textContent="100 cosas que me gustan de ti 🥺❤️";
+  contenidoCarta.innerHTML="";
+  cosas.forEach((c,i)=>{
+    const d=document.createElement("div");
+    d.textContent=(i+1)+". "+c;
+    contenidoCarta.appendChild(d);
+  });
+}
+
+function cerrarOverlay(){
+  overlay.style.display="none";
+}
+
+/* YOUTUBE */
+function irACancion(){
+  window.open("https://www.youtube.com/watch?v=Iq-YwZI6Mb4","_blank");
+}
+
+/* BRILLOS */
+document.addEventListener("mousemove",e=>{
+  const s=document.createElement("div");
+  s.className="sparkle";
+  s.style.left=e.pageX+"px";
+  s.style.top=e.pageY+"px";
+  document.body.appendChild(s);
+  setTimeout(()=>s.remove(),700);
+});
+</script>
+
+</body>
+</html>
